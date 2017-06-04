@@ -94,20 +94,8 @@ public class Summary {
 
             Var v = df.getVar(i);
             
-            if (v.getType() == VarType.BINARY) {
-                typeStrategy = new BinaryTypeStrategy();
-                typeStrategy.getVarSummary(df, v, first, second, k);
-            }
-
-            if (v.getType() == VarType.INDEX || v.getType() == VarType.NUMERIC) {
-                typeStrategy = new NumbericTypeStrategy();
-                typeStrategy.getVarSummary(df, v, first, second, k);
-            }
-
-            if (v.getType().isNominal()) {
-                typeStrategy = new NominalTypeStrategy();
-                typeStrategy.getVarSummary(df, v, first, second, k);
-            }
+            typeStrategy = TypeStrategyFactory.getTypeStrategyFactory(v);
+            typeStrategy.getVarSummary(df, v, first, second, k);
         }
 
         // learn layout
@@ -201,20 +189,8 @@ public class Summary {
             second[i] = " ";
         }
 
-        if (v.getType() == VarType.BINARY) {
-             typeStrategy = new BinaryTypeStrategy();
-             typeStrategy.getPrintSummary(v, first, second);;
-        }
-
-        if (v.getType() == VarType.INDEX || v.getType() == VarType.NUMERIC) {
-            typeStrategy = new NumbericTypeStrategy();
-            typeStrategy.getPrintSummary(v, first, second);
-        }
-
-        if (v.getType().isNominal()) {
-            typeStrategy = new NominalTypeStrategy();
-            typeStrategy.getPrintSummary(v, first, second);
-        }
+        typeStrategy = TypeStrategyFactory.getTypeStrategyFactory(v);
+        typeStrategy.getPrintSummary(v, first, second);
 
         // learn layout
         int wfirst = 0;
