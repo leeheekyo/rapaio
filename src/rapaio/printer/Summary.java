@@ -94,8 +94,10 @@ public class Summary {
 
             Var v = df.getVar(i);
             
-            typeStrategy = TypeStrategyFactory.getTypeStrategyFactory(v);
-            typeStrategy.getVarSummary(df, v, first, second, k);
+            typeStrategy = TypeStrategyFactory.getTypeStrategy(v);
+            if(inCase(v)){
+                typeStrategy.getVarSummary(df, v, first, second, k);
+            }
         }
 
         // learn layout
@@ -173,7 +175,16 @@ public class Summary {
         return buffer.toString();
     }
 
-    public static String getSummary(Var v) {
+    private static boolean inCase(Var v) {
+		// TODO Auto-generated method stub
+    	boolean binary = v.getType() == VarType.BINARY;
+    	boolean numeric = v.getType() == VarType.INDEX || v.getType() == VarType.NUMERIC;
+    	boolean nominal = v.getType().isNominal();
+    	
+		return binary||numeric||nominal;
+	}
+
+	public static String getSummary(Var v) {
 
         StringBuilder sb = new StringBuilder();
         sb.append("> printSummary(var: ").append(v.getName()).append(")\n");
@@ -189,9 +200,11 @@ public class Summary {
             second[i] = " ";
         }
 
-        typeStrategy = TypeStrategyFactory.getTypeStrategyFactory(v);
-        typeStrategy.getPrintSummary(v, first, second);
-
+        typeStrategy = TypeStrategyFactory.getTypeStrategy(v);
+        if(inCase(v)){
+        	typeStrategy.getPrintSummary(v, first, second);
+        }
+        
         // learn layout
         int wfirst = 0;
         int wsecond = 0;
